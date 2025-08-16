@@ -1,18 +1,16 @@
 import React from 'react';
-import { ContactForm } from './ContactForm';
-import { ContactList } from './ContactList';
-import { Filter } from './Filter';
+import { Form } from './Form/Form';
+import { Search } from './Search/Search';
+import { ContactList } from './ContactList/ContactList';
 
-function App() {
+export const App = () => {
   return (
     <div>
-      <h1>Книга контактів</h1>
-      <ContactForm />
-      <h2>Контакти</h2>
-      <Filter />
+      <h1>Phonebook</h1>
+      <Form/>
+      <h2>Contacts</h2>
+      <Search />
       <ContactList />
     </div>
   );
-}
-
-export default App;
+};

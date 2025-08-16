@@ -1,24 +1,38 @@
+import React, { useEffect } from 'react';
+import css from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../redux/contactsSlice';
-import { getContacts, getFilter } from '../redux/selectors';
+import { fetchContacts, selectAllContacts } from '../../redux/contactSlice';
+import { ContactElem } from '../ContactElem/ContactElem';
+import { getFilter } from '../../redux/select'; 
 
-export const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter).toLowerCase();
+const ContactList = () => {
   const dispatch = useDispatch();
+  const contacts = useSelector(selectAllContacts);
+  const filter = useSelector(getFilter);
 
-  const visibleContacts = contacts.filter(c =>
-    c.name.toLowerCase().includes(filter)
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
-    <ul>
-      {visibleContacts.map(({ id, name, phone }) => (
-        <li key={id}>
-          {name}: {phone}
-          <button onClick={() => dispatch(deleteContact(id))}>Видалити</button>
-        </li>
-      ))}
-    </ul>
+    <div className={css.contBox}>
+      <h2 className={css.header}>Contacts</h2>
+      {contacts.length > 0 ? (
+        <ul>
+        {filteredContacts.map(({ id, name, number }) => (
+          <ContactElem key={id} contact={{ id, name, number }} />
+        ))}
+      </ul>
+      ) : (
+      <p>You have no contacts saved yet. Add some to view contact list.</p>
+      )}
+      
+    </div>
   );
 };
+
+export { ContactList };
